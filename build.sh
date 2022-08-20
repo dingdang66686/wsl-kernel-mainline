@@ -15,7 +15,7 @@ set -e
 git clone https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git && cd linux
 
 echo -n "Download Microsoft wsl config"
-curl "https://github.com/microsoft/WSL2-Linux-Kernel/raw/linux-msft-wsl-5.15.y/Microsoft/config-wsl" -o .config
+wget "https://github.com/microsoft/WSL2-Linux-Kernel/raw/linux-msft-wsl-5.15.y/Microsoft/config-wsl" -o .config
 
 cat ../append.config >> .config
 
