@@ -12,10 +12,11 @@ sudo apt install -y curl wget
 # Fail on errors.
 set -e
 
-git clone https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git && cd linux
+git clone https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git --depth=1
+git clone https://github.com/microsoft/WSL2-Linux-Kernel/ --depth=1
+cp WSL2-Linux-Kernel/Microsoft/config-wsl linux/.config
 
-echo -n "Download Microsoft wsl config"
-curl "https://github.com/microsoft/WSL2-Linux-Kernel/raw/linux-msft-wsl-5.15.y/Microsoft/config-wsl" -o .config
+cd linux
 
 cat ../append.config >> .config
 
