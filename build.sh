@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Requirements for Debian/Ubuntu
-#sudo apt install -y git bc build-essential flex bison libssl-dev libelf-dev dwarves
-#sudo apt install -y curl jq wget
+sudo apt install -y git bc build-essential flex bison libssl-dev libelf-dev dwarves
+sudo apt install -y curl jq wget
 
 # Requirements for openSUSE
 #sudo zypper in -y -t pattern devel_basis
@@ -40,8 +40,8 @@ echo ""
 # find -maxdepth 1 -type d -name '*linux-*'
 cd "$(find -maxdepth 1 -type d -regex '\.\/.*linux-.*')"
 
-echo -n "Copy custom default config..."
-cp -f ../../Microsoft/config-wsl .config
+echo -n "Download Microsoft wsl config"
+curl "https://github.com/microsoft/WSL2-Linux-Kernel/raw/linux-msft-wsl-5.15.y/Microsoft/config-wsl" -o .config
 echo ""
 
 #SECONDS=0
@@ -49,14 +49,11 @@ _start=$SECONDS
 
 make olddefconfig
 #make silentoldconfig
-make -j4
+make -j$(nproc)
 
 _elapsedseconds=$(( SECONDS - _start ))
 TZ=UTC0 printf 'Kernel builded: %(%H:%M:%S)T\n' "$_elapsedseconds"
 echo "Kernel build finished: $(date -u '+%H:%M:%S')"
-
-powershell.exe /C 'Copy-Item -Force .\arch\x86\boot\bzImage $env:USERPROFILE\bzImage-'$linux_name
-powershell.exe /C 'Write-Output [wsl2]`nkernel=$env:USERPROFILE\bzImage-'$linux_name' | % {$_.replace("\","\\")} | Out-File $env:USERPROFILE\.wslconfig -encoding ASCII'
 
 popd
 
